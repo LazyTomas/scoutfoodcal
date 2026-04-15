@@ -20,21 +20,23 @@
             --radius-md: 12px;
             --radius-lg: 20px;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --transition: all 0.2s ease;
         }
 
-        /* Essential Reset for Mobile */
+        /* --- FOUNDATION (Bulletproof Reset) --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html, body { height: 100%; margin: 0; padding: 0; background: var(--bg); font-family: 'Segoe UI', system-ui, sans-serif; overflow: hidden; }
+        html, body { 
+            margin: 0; padding: 0; 
+            width: 100%; height: 100%; 
+            background: var(--bg); 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            overflow-x: hidden; /* CRITICAL: Kills horizontal mobile scrolling */
+        }
 
-        /* --- LOGIN SCREEN FIX --- */
+        /* --- LOGIN SCREEN --- */
         #loginScreen { 
             position: fixed; 
-            top: 0; left: 0; 
-            width: 100vw; 
-            height: 100vh; 
-            height: 100dvh; 
-            z-index: 10000; 
+            top: 0; right: 0; bottom: 0; left: 0; /* Locks to exact screen boundaries */
+            z-index: 99999; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
@@ -43,88 +45,119 @@
         }
         .login-card { 
             background: white; 
-            padding: 40px 30px; 
+            padding: 40px 25px; 
             border-radius: var(--radius-lg); 
             width: 100%; 
-            max-width: 400px; 
+            max-width: 350px; 
             text-align: center; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
         }
-        .login-card img { width: 180px; margin-bottom: 25px; }
-        .login-card input { width: 100%; padding: 15px; margin-bottom: 20px; border-radius: var(--radius-md); border: 2px solid #E2E8F0; text-align: center; font-size: 1.1rem; }
+        .login-card img { width: 180px; margin-bottom: 25px; max-width: 100%; }
+        .login-card input { 
+            width: 100%; padding: 15px; margin-bottom: 20px; 
+            border-radius: var(--radius-md); border: 2px solid #E2E8F0; 
+            text-align: center; font-size: 1.1rem; font-weight: bold;
+        }
 
-        /* --- MAIN APP CONTAINER --- */
-        #appContainer { display: none; flex-direction: column; height: 100%; }
+        /* --- APP WRAPPER --- */
+        #appContainer { 
+            display: none; /* Controlled completely by JS */
+            flex-direction: column; 
+            width: 100%; 
+            min-height: 100vh; 
+        }
 
-        /* HEADER */
+        /* --- HEADER --- */
         header { 
             background: var(--panel); 
-            padding: 10px 25px; 
+            padding: 15px; 
             display: flex; 
+            flex-direction: column; /* Mobile first */
             align-items: center; 
-            justify-content: space-between; 
-            box-shadow: var(--shadow); 
+            gap: 15px;
             border-bottom: 4px solid var(--primary);
-            z-index: 100;
+            flex-shrink: 0;
         }
-        .logo-container img { height: 100px; width: auto; }
+        .logo-container img { height: 75px; max-width: 100%; }
         
-        .header-controls { display: flex; align-items: center; gap: 15px; }
-        .pax-inputs { display: flex; gap: 8px; background: #F8FAFC; padding: 8px; border-radius: var(--radius-md); border: 1px solid #E2E8F0; }
+        .header-controls { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; }
+        .pax-inputs { display: flex; flex-wrap: wrap; gap: 8px; background: #F8FAFC; padding: 10px; border-radius: var(--radius-md); border: 1px solid #E2E8F0; justify-content: center; width: 100%; }
         .input-group { display: flex; flex-direction: column; align-items: center; }
         .input-group label { font-size: 10px; font-weight: 800; color: var(--secondary); margin-bottom: 2px; }
-        .input-group input { width: 55px; padding: 5px; border-radius: 6px; border: 1px solid #CBD5E0; text-align: center; font-weight: bold; font-size: 13px; }
+        .input-group input { width: 55px; padding: 6px; border-radius: 6px; border: 1px solid #CBD5E0; text-align: center; font-weight: bold; font-size: 13px; }
         #paxTotal { width: 75px; background: var(--primary-light); color: var(--primary); }
 
-        /* LAYOUT */
-        main { display: grid; grid-template-columns: 380px 1fr 420px; flex-grow: 1; overflow: hidden; gap: 20px; padding: 20px; }
-        .panel { background: var(--panel); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--shadow); border: 1px solid #E2E8F0; }
-        .panel-header { padding: 20px; border-bottom: 1px solid #EDF2F7; display: flex; justify-content: space-between; align-items: center; }
-        .panel-header h3 { margin: 0; font-size: 1.2rem; color: var(--primary); font-weight: 800; }
-        .panel-content { flex-grow: 1; overflow-y: auto; padding: 20px; }
+        /* --- MAIN LAYOUT (Mobile First) --- */
+        main { 
+            display: flex; 
+            flex-direction: column; 
+            flex-grow: 1; 
+            gap: 20px; 
+            padding: 15px; 
+        }
+        .panel { 
+            background: var(--panel); border-radius: var(--radius-lg); 
+            display: flex; flex-direction: column; 
+            box-shadow: var(--shadow); border: 1px solid #E2E8F0; 
+            min-height: 400px; 
+        }
+        .panel-header { padding: 15px; border-bottom: 1px solid #EDF2F7; display: flex; justify-content: space-between; align-items: center; }
+        .panel-header h3 { margin: 0; font-size: 1.1rem; color: var(--primary); font-weight: 800; }
+        .panel-content { padding: 15px; overflow-y: auto; flex-grow: 1; }
 
-        /* COMPONENTS */
-        .btn { padding: 10px 16px; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition); font-size: 14px; }
+        /* --- DESKTOP OVERRIDES --- */
+        @media (min-width: 1100px) {
+            #appContainer { height: 100vh; overflow: hidden; }
+            header { flex-direction: row; justify-content: space-between; padding: 10px 25px; }
+            .header-controls { flex-direction: row; width: auto; }
+            .pax-inputs { width: auto; flex-wrap: nowrap; }
+            main { 
+                flex-direction: row; display: grid; 
+                grid-template-columns: 360px 1fr 380px; 
+                height: calc(100vh - 100px); overflow: hidden; 
+            }
+            .panel { min-height: 0; height: 100%; } /* Enables internal scrolling */
+        }
+
+        /* --- UI COMPONENTS --- */
+        .btn { padding: 10px 16px; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; text-align: center; justify-content: center; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-secondary { background: #EDF2F7; color: var(--secondary); }
         .btn-danger { background: #FFF5F5; color: var(--danger); border: 1px solid #FED7D7; }
-        .btn-success { background: var(--success); color: white; width: 100%; padding: 18px; font-size: 1.1rem; justify-content: center; }
+        .btn-success { background: var(--success); color: white; width: 100%; padding: 18px; font-size: 1.1rem; }
 
-        .card { background: white; border-radius: var(--radius-md); border: 1px solid #E2E8F0; margin-bottom: 12px; transition: var(--transition); position: relative; }
-        .recipe-card { padding: 15px; cursor: pointer; border-right: 5px solid #CBD5E0; }
+        .card { background: white; border-radius: var(--radius-md); border: 1px solid #E2E8F0; margin-bottom: 12px; padding: 12px; }
+        .recipe-card { cursor: pointer; border-right: 5px solid #CBD5E0; }
         .recipe-card.mine { border-right-color: var(--primary); }
         .card-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
-        .tag { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #EDF2F7; font-weight: bold; }
-        .meal-card-header { background: #F8FAFC; padding: 12px 15px; font-weight: 800; display: flex; justify-content: space-between; border-bottom: 1px solid #EDF2F7; }
+        .tag { font-size: 11px; padding: 3px 8px; border-radius: 10px; background: #EDF2F7; font-weight: bold; display: inline-block; }
+        .meal-card-header { background: #F8FAFC; padding: 10px 15px; font-weight: 800; display: flex; justify-content: space-between; border-bottom: 1px solid #EDF2F7; margin: -12px -12px 12px -12px; border-radius: 12px 12px 0 0; }
 
-        .lib-section-header { padding: 15px; background: #F8FAFC; border-radius: var(--radius-md); display: flex; justify-content: space-between; font-weight: 800; color: var(--primary); margin-top: 20px; margin-bottom: 10px; }
+        .lib-section-header { padding: 15px; background: #F8FAFC; border-radius: var(--radius-md); display: flex; justify-content: space-between; font-weight: 800; color: var(--primary); margin: 20px 0 10px 0; }
         .lib-section-header.collapsible { cursor: pointer; }
 
-        /* MODALS */
-        .modal { display: none; position: fixed; inset: 0; background: white; z-index: 9000; padding: 40px; overflow-y: auto; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #f1f5f9; padding-bottom: 20px; }
-        .ing-row { display: grid; grid-template-columns: 1.5fr 0.6fr 0.8fr 1fr 2fr 45px; gap: 15px; margin-bottom: 10px; align-items: center; padding: 12px; background: #f8fafc; border-radius: var(--radius-md); }
-        .ing-row input, .ing-row select { padding: 10px; border: 1px solid #CBD5E0; border-radius: 8px; width: 100%; }
-
-        .diet-multi { display: flex; flex-wrap: wrap; gap: 4px; }
-        .diet-opt { font-size: 10px; display: flex; align-items: center; gap: 2px; background: #fff; border: 1px solid #CBD5E0; padding: 4px 6px; border-radius: 6px; cursor: pointer; }
+        /* --- MODALS (Mobile First) --- */
+        .modal { display: none; position: fixed; inset: 0; background: white; z-index: 10000; padding: 20px; overflow-y: auto; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; }
+        
+        .ing-row { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; padding: 15px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid #e2e8f0; }
+        .ing-row input, .ing-row select { padding: 12px; border: 1px solid #CBD5E0; border-radius: 8px; font-size: 14px; width: 100%; }
+        
+        .diet-multi { display: flex; flex-wrap: wrap; gap: 6px; margin: 5px 0; }
+        .diet-opt { font-size: 11px; display: flex; align-items: center; gap: 4px; background: #fff; border: 1px solid #CBD5E0; padding: 6px 10px; border-radius: 8px; cursor: pointer; }
         .diet-opt input { display: none; }
         .diet-opt:has(input:checked) { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* MOBILE ADJUSTMENTS */
-        @media (max-width: 1100px) {
-            html, body { overflow: auto; height: auto; }
-            #appContainer { height: auto; }
-            main { grid-template-columns: 1fr; overflow: visible; padding: 10px; }
-            .panel { height: 600px; margin-bottom: 20px; }
-            header { flex-direction: column; height: auto; padding: 15px; gap: 15px; }
-            .header-controls { flex-direction: column; width: 100%; }
-            .pax-inputs { width: 100%; justify-content: space-around; }
-            .ing-row { grid-template-columns: 1fr 1fr; }
-            .ing-row > *:nth-child(5) { grid-column: span 2; }
+        .admin-grid { display: flex; flex-direction: column; gap: 10px; }
+        .table-responsive { width: 100%; overflow-x: auto; margin-top: 20px; }
+
+        @media (min-width: 800px) {
+            .modal { padding: 40px; }
+            .ing-row { flex-direction: row; display: grid; grid-template-columns: 1.5fr 0.6fr 0.8fr 1fr 2.5fr 45px; align-items: center; }
+            .admin-grid { flex-direction: row; display: grid; grid-template-columns: 1fr 1fr 1fr auto; align-items: flex-end; }
         }
 
-        #toast { visibility: hidden; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #2D3748; color: white; padding: 12px 30px; border-radius: 50px; z-index: 11000; font-weight: bold; }
+        #toast { visibility: hidden; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #2D3748; color: white; padding: 15px 35px; border-radius: 50px; z-index: 99999; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
     </style>
 </head>
 <body>
@@ -133,10 +166,11 @@
 
 <div id="loginScreen">
     <div class="login-card">
-        <img src="משלחות קיץ צבעוני.png" alt="לוגו">
-        <h2 style="color:var(--primary); margin:0;">כניסת משלחת</h2>
-        <input type="text" id="usernameInput" placeholder="שם משתמש (admin)" onkeypress="if(event.key==='Enter') login()">
-        <button class="btn btn-primary" onclick="login()" style="width:100%; justify-content:center; padding:18px; font-size:1.2rem;">התחברות למערכת</button>
+        <img src="משלחות קיץ צבעוני.png" alt="לוגו צופים">
+        <h2 style="color:var(--primary); margin:0 0 10px 0;">כניסת משלחת</h2>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px;">הקלד <strong style="color:var(--primary)">admin</strong> לכניסת מנהל</p>
+        <input type="text" id="usernameInput" placeholder="ID כניסה" onkeypress="if(event.key==='Enter') login()">
+        <button class="btn btn-primary" onclick="login()" style="width:100%; padding:15px; font-size:1.2rem;">התחברות למערכת</button>
     </div>
 </div>
 
@@ -151,8 +185,8 @@
                 <div class="input-group"><label>גלוטן 🌾</label><input type="number" id="paxGF" value="0" oninput="calc()"></div>
                 <div class="input-group"><label>לקטוז 🥛</label><input type="number" id="paxLac" value="0" oninput="calc()"></div>
             </div>
-            <div id="userDisplay"></div>
-            <div style="display:flex; gap:8px;">
+            <div style="display:flex; align-items:center; gap:15px;">
+                <div id="userDisplay" style="font-weight:bold; font-size:14px; color:var(--primary);"></div>
                 <button class="btn btn-secondary" onclick="logout()">התנתקות</button>
                 <button id="adminBtn" class="btn btn-primary" style="display:none;" onclick="openAdminModal()">⚙️ ניהול</button>
             </div>
@@ -161,27 +195,38 @@
 
     <main>
         <section class="panel">
-            <div class="panel-header"><h3>מאגר מתכונים</h3><button class="btn btn-primary" onclick="openRecipeModal()">+ חדש</button></div>
+            <div class="panel-header">
+                <h3>מאגר מתכונים</h3>
+                <button class="btn btn-primary" onclick="openRecipeModal()">+ חדש</button>
+            </div>
             <div class="panel-content">
                 <input type="text" id="libSearch" style="width:100%; padding:12px; border-radius:var(--radius-md); border:1px solid #E2E8F0; margin-bottom:15px;" placeholder="חפש מתכון..." oninput="renderLib()">
-                <div class="lib-section-header"><span>⭐ המתכונים שלי</span></div>
+                
+                <div class="lib-section-header" style="margin-top:0;"><span>⭐ המתכונים שלי</span></div>
                 <div id="myRecipesContainer"></div>
+                
                 <div class="lib-section-header collapsible" onclick="toggleOtherLibrary()">
-                    <span>🌍 מתכוני משלחות אחרות</span><span id="libraryArrow">▼</span>
+                    <span>🌍 מתכוני משלחות אחרות</span>
+                    <span id="libraryArrow">▼</span>
                 </div>
                 <div id="otherRecipesContainer" style="display:none;"></div>
             </div>
         </section>
 
         <section class="panel">
-            <div class="panel-header"><h3>תפריט המשלחת</h3><button class="btn btn-danger" onclick="clearPlan()">נקה הכל</button></div>
+            <div class="panel-header">
+                <h3>תפריט המשלחת</h3>
+                <button class="btn btn-danger" onclick="clearPlan()">נקה הכל</button>
+            </div>
             <div class="panel-content" id="plannerContainer"></div>
         </section>
 
         <section class="panel">
             <div class="panel-header"><h3>רשימת קניות</h3></div>
             <div class="panel-content" id="shoppingContainer"></div>
-            <div style="padding: 20px; border-top: 1px solid #EDF2F7;"><button class="btn btn-success" onclick="copyToClipboard()">📲 העתק לוואטסאפ</button></div>
+            <div style="padding: 15px; border-top: 1px solid #EDF2F7;">
+                <button class="btn btn-success" onclick="copyToClipboard()">📲 העתק לוואטסאפ</button>
+            </div>
         </section>
     </main>
 </div>
@@ -191,72 +236,87 @@
         <h2 style="margin:0; color:var(--primary)">עורך מתכונים</h2>
         <button class="btn btn-secondary" onclick="closeRecipeModal()">סגור</button>
     </div>
-    <div style="max-width:1100px; margin:0 auto;">
+    <div style="max-width:1100px; margin:0 auto; width:100%;">
         <input type="text" id="mName" placeholder="שם המנה" style="width:100%; padding:20px; font-size:1.5rem; font-weight:800; border:2px solid var(--primary); border-radius:var(--radius-md); margin-bottom:25px;">
         <div id="modalIngs"></div>
-        <button class="btn btn-secondary" onclick="addIngRow()" style="width:100%; margin-top:10px; border:2px dashed #CBD5E0; justify-content:center;">+ הוסף רכיב</button>
-        <div style="margin-top:40px; display:flex; gap:15px;">
-            <button class="btn btn-primary" onclick="saveRecipe()" style="flex:2; justify-content:center; padding:18px;">שמור למאגר</button>
-            <button class="btn btn-secondary" onclick="closeRecipeModal()" style="flex:1; justify-content:center;">ביטול</button>
+        <button class="btn btn-secondary" onclick="addIngRow()" style="width:100%; margin-top:10px; border:2px dashed #CBD5E0; justify-content:center;">+ הוסף שורת רכיב</button>
+        <div style="margin-top:40px; display:flex; gap:15px; flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="saveRecipe()" style="flex:1; min-width:200px; justify-content:center; padding:18px; font-size:1.1rem;">שמור למאגר</button>
+            <button class="btn btn-secondary" onclick="closeRecipeModal()" style="flex:1; min-width:150px; justify-content:center;">ביטול</button>
         </div>
     </div>
 </div>
 
 <div id="adminModal" class="modal">
-    <div class="modal-header"><h2>ניהול משתמשים</h2><button class="btn btn-secondary" onclick="closeAdminModal()">סגור</button></div>
-    <div style="max-width:900px; margin:0 auto;">
-        <div class="card" style="padding:25px; background:#f8fafc; display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:15px; align-items:flex-end; margin-bottom:30px;">
-            <div><label style="font-size:12px; font-weight:bold;">ID כניסה</label><input type="text" id="newUsername" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px;"></div>
-            <div><label style="font-size:12px; font-weight:bold;">שם תצוגה</label><input type="text" id="newName" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px;"></div>
-            <div><label style="font-size:12px; font-weight:bold;">מדינה</label><select id="newCountrySelect" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; height:42px;"></select></div>
-            <button class="btn btn-primary" id="adminActionBtn" onclick="addNewUser()" style="height:42px;">שמור משתמש</button>
+    <div class="modal-header">
+        <h2 style="margin:0;">ניהול משתמשים</h2>
+        <button class="btn btn-secondary" onclick="closeAdminModal()">סגור</button>
+    </div>
+    <div style="max-width:900px; margin:0 auto; width:100%;">
+        <div class="card" style="padding:25px; background:#f8fafc; margin-bottom:20px;">
+            <div class="admin-grid">
+                <div><label style="font-size:12px; font-weight:bold; display:block; margin-bottom:5px;">ID כניסה</label><input type="text" id="newUsername" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:8px;"></div>
+                <div><label style="font-size:12px; font-weight:bold; display:block; margin-bottom:5px;">שם תצוגה</label><input type="text" id="newName" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:8px;"></div>
+                <div><label style="font-size:12px; font-weight:bold; display:block; margin-bottom:5px;">מדינה</label><select id="newCountrySelect" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:8px;"></select></div>
+                <button class="btn btn-primary" id="adminActionBtn" onclick="addNewUser()" style="height:44px;">שמור משתמש</button>
+            </div>
         </div>
-        <table style="width:100%; border-collapse:collapse; text-align:right;">
-            <thead><tr style="border-bottom:2px solid #edf2f7;"><th style="padding:15px;">ID</th><th>שם</th><th>מדינה</th><th style="text-align:center">פעולות</th></tr></thead>
-            <tbody id="usersTableBody"></tbody>
-        </table>
+        <div class="table-responsive">
+            <table style="width:100%; border-collapse:collapse; text-align:right; min-width:400px;">
+                <thead><tr style="border-bottom:2px solid #edf2f7;"><th style="padding:15px;">ID</th><th>שם</th><th>מדינה</th><th style="text-align:center">פעולות</th></tr></thead>
+                <tbody id="usersTableBody"></tbody>
+            </table>
+        </div>
     </div>
 </div>
 
 <script>
+    // System Data
     const COUNTRIES = { "ישראל": "🇮🇱", "רומניה": "🇷🇴", "הונגריה": "🇭🇺", "דנמרק": "🇩🇰", "אנגליה": "🇬🇧", "שוויץ": "🇨🇭" };
-    const DIETS = [
-        {id: 'none', label: 'רגיל'},
-        {id: 'Vegan', label: 'טבעוני 🥬'},
-        {id: 'Vegetarian', label: 'צמחוני 🥦'},
-        {id: 'GF', label: 'גלוטן 🌾'},
-        {id: 'Lac', label: 'לקטוז 🥛'}
-    ];
+    const DIETS = [ {id: 'none', label: 'רגיל'}, {id: 'Vegan', label: 'טבעוני 🥬'}, {id: 'Vegetarian', label: 'צמחוני 🥦'}, {id: 'GF', label: 'גלוטן 🌾'}, {id: 'Lac', label: 'לקטוז 🥛'} ];
     const UNITS = ["קג", "גרם", "ליטר", "מל", "יחידות", "חבילות", "ארגזים"];
     const CATEGORIES = ["ירקות ופירות", "מוצרים יבשים", "מאפיה", "מוצרי בשר", "מוצרי חלב", "תבלינים", "חטיפים ומתוקים", "ציוד מתכלה"];
 
-    let USERS = JSON.parse(localStorage.getItem('scoutUsers')) || { "admin": { name: "תומר", country: "ישראל", flag: "🇮🇱", role: "admin" } };
+    // App State Initialization
+    let USERS = {};
+    try { USERS = JSON.parse(localStorage.getItem('scoutUsers')) || {}; } catch(e) { USERS = {}; }
+    USERS["admin"] = { name: "תומר", country: "ישראל", flag: "🇮🇱", role: "admin" }; // Enforce Admin Identity
+    localStorage.setItem('scoutUsers', JSON.stringify(USERS));
+
     let globalLibrary = JSON.parse(localStorage.getItem('globalScoutLibrary')) || {};
     let currentUser = null, userPlan = [], currentTotals = {}, editingUserId = null;
 
+    // Logic: Login
     function login() {
         const input = document.getElementById('usernameInput').value.toLowerCase().trim();
         if (USERS[input]) {
             currentUser = { ...USERS[input], id: input };
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('appContainer').style.display = 'flex'; 
+            document.getElementById('loginScreen').style.display = 'none'; // Kills the overlay
+            document.getElementById('appContainer').style.display = 'flex'; // Activates app layout
             document.getElementById('adminBtn').style.display = (currentUser.role === 'admin') ? 'inline-flex' : 'none';
-            userPlan = JSON.parse(localStorage.getItem('plan_' + currentUser.id)) || [];
-            updateUserUI(); renderLib(); calc();
-        } else { alert("משתמש לא קיים"); }
+            
+            try { userPlan = JSON.parse(localStorage.getItem('plan_' + currentUser.id)) || []; } catch(e) { userPlan = []; }
+            
+            document.getElementById('userDisplay').innerHTML = `${currentUser.name} ${currentUser.flag}`;
+            renderLib(); calc();
+        } else { 
+            alert("משתמש לא קיים. אם אתה המנהל, הקלד: admin"); 
+        }
     }
 
     function logout() { location.reload(); }
-    function updateUserUI() { document.getElementById('userDisplay').innerHTML = `<div style="font-weight:bold; color:var(--primary); font-size: 14px;">${currentUser.name} ${currentUser.flag}</div>`; }
 
     function toggleOtherLibrary() {
         const container = document.getElementById('otherRecipesContainer');
         const arrow = document.getElementById('libraryArrow');
-        const isHidden = container.style.display === 'none';
-        container.style.display = isHidden ? 'block' : 'none';
-        arrow.innerText = isHidden ? '▲' : '▼';
+        if (container.style.display === 'none') {
+            container.style.display = 'block'; arrow.innerText = '▲';
+        } else {
+            container.style.display = 'none'; arrow.innerText = '▼';
+        }
     }
 
+    // Logic: Render Library
     function renderLib() {
         let myCont = document.getElementById('myRecipesContainer'), otherCont = document.getElementById('otherRecipesContainer');
         myCont.innerHTML = ''; otherCont.innerHTML = '';
@@ -267,11 +327,11 @@
             let meal = globalLibrary[key], isMine = meal.creatorId === currentUser.id;
             let html = `
                 <div class="card recipe-card ${isMine ? 'mine' : ''}" onclick="addToPlan('${key}')">
-                    <div style="font-weight:800;">${key}</div>
+                    <div style="font-weight:800; font-size:15px;">${key}</div>
                     <div class="card-meta">
                         <span class="tag">${meal.creatorName} ${meal.creatorFlag || ''}</span>
-                        <div style="display:flex; gap:10px; font-size:18px;">
-                            ${isMine ? `<span onclick="event.stopPropagation(); openRecipeModal('${key}')">✏️</span><span onclick="event.stopPropagation(); deleteFromLib('${key}')">❌</span>` : `<button class="tag" style="background:var(--primary-light); color:var(--primary); border:none; cursor:pointer" onclick="event.stopPropagation(); duplicateMeal('${key}')">הוסף למתכונים שלי</button>`}
+                        <div style="display:flex; gap:10px; font-size:16px;">
+                            ${isMine ? `<span onclick="event.stopPropagation(); openRecipeModal('${key}')">✏️ ערוך</span><span onclick="event.stopPropagation(); deleteFromLib('${key}')">❌ מחיקה</span>` : `<button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; background:var(--primary-light); color:var(--primary);" onclick="event.stopPropagation(); duplicateMeal('${key}')">הוסף למתכונים שלי</button>`}
                         </div>
                     </div>
                 </div>`;
@@ -279,6 +339,7 @@
         }
     }
 
+    // Logic: Core Calculator Engine
     function calc() {
         const pax = { 
             total: Math.max(0, parseInt(document.getElementById('paxTotal').value || 0)), 
@@ -297,33 +358,41 @@
                     let mult = 0;
                     let rests = Array.isArray(ing.r) ? ing.r : [ing.r];
                     if (rests.includes('none')) { mult = pax.total; } else { rests.forEach(r => mult += (pax[r] || 0)); }
+                    
                     let rawAmt = (mult / 10) * ing.q, finalU = ing.u, finalAmt = rawAmt;
                     if (ing.u === "גרם") { finalAmt = rawAmt / 1000; finalU = "קג"; }
                     if (ing.u === "מל") { finalAmt = rawAmt / 1000; finalU = "ליטר"; }
-                    mHTML += `<div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px dashed #eee; font-size:14px;"><span>${ing.n}</span><span style="font-weight:bold; color:var(--primary)">${finalAmt.toFixed(2)} ${finalU}</span></div>`;
+                    
+                    let displayAmt = finalAmt % 1 === 0 ? finalAmt : finalAmt.toFixed(2);
+                    
+                    mHTML += `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed #eee; font-size:14px;"><span>${ing.n}</span><span style="font-weight:bold; color:var(--primary)">${displayAmt} ${finalU}</span></div>`;
+                    
                     if (!currentTotals[ing.c]) currentTotals[ing.c] = {};
                     let key = `${ing.n} (${finalU})`;
                     currentTotals[ing.c][key] = (currentTotals[ing.c][key] || 0) + finalAmt;
                 });
-                plannerHTML += `<div class="card" style="border-right:5px solid var(--accent); overflow:hidden;"><div class="meal-card-header">${mealName} <span onclick="removeFromPlan(${idx})" style="cursor:pointer">❌</span></div><div style="padding:15px;">${mHTML}</div></div>`;
+                plannerHTML += `<div class="card" style="border-right:5px solid var(--accent);"><div class="meal-card-header">${mealName} <span onclick="removeFromPlan(${idx})" style="cursor:pointer; color:var(--danger);">❌</span></div><div>${mHTML}</div></div>`;
             }
         });
-        document.getElementById('plannerContainer').innerHTML = plannerHTML || '<div style="text-align:center; color:#ccc; margin-top:40px;">הוסיפו מתכונים כדי להתחיל</div>';
+        document.getElementById('plannerContainer').innerHTML = plannerHTML || '<div style="text-align:center; color:#A0AEC0; margin-top:40px; font-weight:bold;">הוסיפו מתכונים כדי להתחיל</div>';
         
         let shopHTML = '';
         CATEGORIES.forEach(c => {
-            if (currentTotals[c]) {
-                shopHTML += `<div style="margin-bottom:20px;"><div style="font-weight:bold; color:var(--secondary); border-bottom:2px solid var(--primary-light); margin-bottom:8px; font-size:13px; text-transform:uppercase;">${c}</div>`;
+            if (currentTotals[c] && Object.keys(currentTotals[c]).length > 0) {
+                shopHTML += `<div style="margin-bottom:20px; background:#F8FAFC; padding:15px; border-radius:12px;"><div style="font-weight:900; color:var(--secondary); border-bottom:3px solid var(--primary-light); margin-bottom:10px; padding-bottom:5px; font-size:14px;">${c}</div>`;
                 for (let k in currentTotals[c]) {
                     let u = k.split('(')[1].replace(')','');
-                    shopHTML += `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #f9f9f9;"><span>${k.split(' (')[0]}</span><span style="font-weight:bold; color:var(--primary)">${currentTotals[c][k].toFixed(2)} ${u}</span></div>`;
+                    let amt = currentTotals[c][k];
+                    let displayAmt = (u==="קג"||u==="ליטר") ? (amt % 1 === 0 ? amt : amt.toFixed(2)) : Math.ceil(amt);
+                    shopHTML += `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #edf2f7;"><span>${k.split(' (')[0]}</span><span style="font-weight:bold; color:var(--primary); font-size:15px;">${displayAmt} ${u}</span></div>`;
                 }
                 shopHTML += `</div>`;
             }
         });
-        document.getElementById('shoppingContainer').innerHTML = shopHTML;
+        document.getElementById('shoppingContainer').innerHTML = shopHTML || '<div style="text-align:center; color:#A0AEC0; font-weight:bold; margin-top:40px;">הרשימה ריקה</div>';
     }
 
+    // Logic: Editor Modal
     function openRecipeModal(key=null) { 
         document.getElementById('mName').value = key || ""; 
         document.getElementById('modalIngs').innerHTML = "";
@@ -345,52 +414,92 @@
     function addIngRow(d={n:"", q:0, u:"קג", c:"מוצרים יבשים", r:['none']}) {
         let div = document.createElement('div'); div.className = 'ing-row';
         let activeRests = Array.isArray(d.r) ? d.r : [d.r];
-        let dietHTML = DIETS.map(diet => `<label class="diet-opt"><input type="checkbox" value="${diet.id}" ${activeRests.includes(diet.id) ? 'checked' : ''} onchange="handleDietClick(this, this.closest('.diet-multi'))">${diet.label}</label>`).join('');
-        div.innerHTML = `<input type="text" class="i-name" value="${d.n}" placeholder="רכיב"><input type="number" class="i-qty" value="${d.q}" step="0.01"><select>${UNITS.map(u=>`<option ${d.u==u?'selected':''}>${u}</option>`).join('')}</select><select>${CATEGORIES.map(c=>`<option ${d.c==c?'selected':''}>${c}</option>`).join('')}</select><div class="diet-multi">${dietHTML}</div><button onclick="this.parentElement.remove()" style="background:none; border:none; cursor:pointer; font-size:18px;">❌</button>`;
+        let dietHTML = DIETS.map(diet => `
+            <label class="diet-opt">
+                <input type="checkbox" value="${diet.id}" ${activeRests.includes(diet.id) ? 'checked' : ''} onchange="handleDietClick(this, this.closest('.diet-multi'))">
+                ${diet.label}
+            </label>
+        `).join('');
+
+        div.innerHTML = `
+            <input type="text" class="i-name" value="${d.n}" placeholder="שם הרכיב">
+            <input type="number" class="i-qty" value="${d.q}" step="0.01" placeholder="כמות">
+            <select>${UNITS.map(u=>`<option ${d.u==u?'selected':''}>${u}</option>`).join('')}</select>
+            <select>${CATEGORIES.map(c=>`<option ${d.c==c?'selected':''}>${c}</option>`).join('')}</select>
+            <div class="diet-multi">${dietHTML}</div>
+            <button class="btn btn-danger" onclick="this.parentElement.remove()" style="width:100%; padding:12px;">מחק שורה</button>
+        `;
         document.getElementById('modalIngs').appendChild(div);
     }
 
     function saveRecipe() {
-        let n = document.getElementById('mName').value.trim(); if(!n) return alert("שם מנה חובה");
+        let n = document.getElementById('mName').value.trim(); if(!n) return alert("אנא הזן שם מנה");
         let rows = Array.from(document.querySelectorAll('.ing-row'));
         globalLibrary[n] = { 
             creatorId: currentUser.id, creatorName: currentUser.name, creatorFlag: currentUser.flag, 
             ings: rows.map(r=> {
                 let sels = r.querySelectorAll('select');
                 let selectedDiets = Array.from(r.querySelectorAll('.diet-multi input:checked')).map(cb => cb.value);
-                return { n: r.querySelector('.i-name').value, q: parseFloat(r.querySelector('.i-qty').value||0), u: sels[0].value, c: sels[1].value, r: selectedDiets.length ? selectedDiets : ['none'] };
+                return { 
+                    n: r.querySelector('.i-name').value, 
+                    q: parseFloat(r.querySelector('.i-qty').value||0), 
+                    u: sels[0].value, 
+                    c: sels[1].value, 
+                    r: selectedDiets.length ? selectedDiets : ['none'] 
+                };
             }).filter(i=>i.n!="") 
         };
         localStorage.setItem('globalScoutLibrary', JSON.stringify(globalLibrary)); renderLib(); calc(); closeRecipeModal();
     }
 
-    function deleteFromLib(key) { if(confirm("למחוק מתכון מהמאגר?")) { delete globalLibrary[key]; localStorage.setItem('globalScoutLibrary', JSON.stringify(globalLibrary)); renderLib(); calc(); } }
+    // Interactions
+    function deleteFromLib(key) { if(confirm("למחוק מתכון מהמאגר הכללי?")) { delete globalLibrary[key]; localStorage.setItem('globalScoutLibrary', JSON.stringify(globalLibrary)); renderLib(); calc(); } }
     function duplicateMeal(key) { let nk=key+" (עותק)"; globalLibrary[nk]={...globalLibrary[key], creatorId:currentUser.id, creatorName:currentUser.name, creatorFlag:currentUser.flag}; localStorage.setItem('globalScoutLibrary', JSON.stringify(globalLibrary)); renderLib(); openRecipeModal(nk); }
     function addToPlan(key) { userPlan.push(key); localStorage.setItem('plan_' + currentUser.id, JSON.stringify(userPlan)); calc(); }
     function removeFromPlan(i) { userPlan.splice(i, 1); localStorage.setItem('plan_' + currentUser.id, JSON.stringify(userPlan)); calc(); }
-    function clearPlan() { if(confirm("לנקות את כל התפריט?")) { userPlan = []; localStorage.setItem('plan_' + currentUser.id, JSON.stringify(userPlan)); calc(); } }
+    function clearPlan() { if(confirm("האם למחוק את כל התפריט?")) { userPlan = []; localStorage.setItem('plan_' + currentUser.id, JSON.stringify(userPlan)); calc(); } }
 
+    // Admin Tools
     function openAdminModal() { document.getElementById('newCountrySelect').innerHTML = Object.keys(COUNTRIES).map(c=>`<option value="${c}">${c}</option>`).join(''); renderUsersTable(); document.getElementById('adminModal').style.display='block'; }
-    function closeAdminModal() { document.getElementById('adminModal').style.display='none'; }
+    function closeAdminModal() { document.getElementById('adminModal').style.display='none'; resetAdminForm(); }
+    
     function addNewUser() {
         const id = document.getElementById('newUsername').value.toLowerCase().trim(), name = document.getElementById('newName').value, country = document.getElementById('newCountrySelect').value;
-        if(!id || !name) return alert("מלא פרטים");
+        if(!id || !name) return alert("נא למלא את כל הפרטים");
         if(editingUserId && editingUserId !== id) delete USERS[editingUserId];
         USERS[id] = { name, country, flag: COUNTRIES[country], role: id === 'admin' ? 'admin' : 'user' };
         localStorage.setItem('scoutUsers', JSON.stringify(USERS)); resetAdminForm(); renderUsersTable();
     }
-    function resetAdminForm() { document.getElementById('newUsername').value = ''; document.getElementById('newName').value = ''; editingUserId = null; }
-    function editUser(id) { const u = USERS[id]; document.getElementById('newUsername').value = id; document.getElementById('newName').value = u.name; document.getElementById('newCountrySelect').value = u.country; editingUserId = id; }
+    
+    function resetAdminForm() { document.getElementById('newUsername').value = ''; document.getElementById('newName').value = ''; editingUserId = null; document.getElementById('adminActionBtn').innerText = 'שמור משתמש'; }
+    function editUser(id) { const u = USERS[id]; document.getElementById('newUsername').value = id; document.getElementById('newName').value = u.name; document.getElementById('newCountrySelect').value = u.country; editingUserId = id; document.getElementById('adminActionBtn').innerText = 'עדכן משתמש'; }
+    
     function renderUsersTable() {
         const b = document.getElementById('usersTableBody'); b.innerHTML = "";
-        for(let id in USERS) b.innerHTML += `<tr style="border-bottom:1px solid #edf2f7;"><td style="padding:15px;">${id}</td><td>${USERS[id].name}</td><td>${USERS[id].country} ${USERS[id].flag}</td><td style="text-align:center;">${id !== 'admin' ? `<span onclick="editUser('${id}')" style="cursor:pointer; margin-left:15px;">✏️</span><span onclick="deleteUser('${id}')" style="cursor:pointer;">❌</span>` : '--'}</td></tr>`;
+        for(let id in USERS) {
+            b.innerHTML += `<tr style="border-bottom:1px solid #edf2f7;"><td style="padding:15px; font-weight:bold;">${id}</td><td>${USERS[id].name}</td><td>${USERS[id].country} ${USERS[id].flag}</td><td style="text-align:center;">${id !== 'admin' ? `<span onclick="editUser('${id}')" style="cursor:pointer; margin-left:15px; font-size:18px;">✏️</span><span onclick="deleteUser('${id}')" style="cursor:pointer; font-size:18px;">❌</span>` : '--'}</td></tr>`;
+        }
     }
-    function deleteUser(id) { if(confirm("מחיקת משתמש?")) { delete USERS[id]; localStorage.setItem('scoutUsers', JSON.stringify(USERS)); renderUsersTable(); } }
+    
+    function deleteUser(id) { if(confirm("למחוק משתמש זה?")) { delete USERS[id]; localStorage.setItem('scoutUsers', JSON.stringify(USERS)); renderUsersTable(); } }
 
+    // Export Data
     function copyToClipboard() {
         let text = `🛒 *רשימת קניות המשלחת ל${currentUser.country} ${currentUser.flag}*\n----------------------------------------\n`;
-        CATEGORIES.forEach(cat => { if (currentTotals[cat]) { text += `\n*${cat.toUpperCase()}*\n`; for (let item in currentTotals[cat]) { let u = item.split('(')[1].replace(')', ''), amt = currentTotals[cat][item].toFixed(2); text += `• ${item.split(' (')[0]}: ${amt} ${u}\n`; } } });
-        navigator.clipboard.writeText(text).then(() => { let t = document.getElementById("toast"); t.style.visibility = "visible"; setTimeout(() => t.style.visibility = "hidden", 3000); });
+        CATEGORIES.forEach(cat => { 
+            if (currentTotals[cat] && Object.keys(currentTotals[cat]).length > 0) { 
+                text += `\n*${cat.toUpperCase()}*\n`; 
+                for (let item in currentTotals[cat]) { 
+                    let u = item.split('(')[1].replace(')', '');
+                    let amt = currentTotals[cat][item];
+                    let displayAmt = (u==="קג"||u==="ליטר") ? (amt % 1 === 0 ? amt : amt.toFixed(2)) : Math.ceil(amt);
+                    text += `• ${item.split(' (')[0]}: ${displayAmt} ${u}\n`; 
+                } 
+            } 
+        });
+        navigator.clipboard.writeText(text).then(() => { 
+            let t = document.getElementById("toast"); t.style.visibility = "visible"; setTimeout(() => t.style.visibility = "hidden", 3000); 
+        });
     }
 </script>
 </body>
