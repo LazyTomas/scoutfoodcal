@@ -33,7 +33,7 @@
             top: 0; left: 0; 
             width: 100vw; 
             height: 100vh; 
-            height: 100dvh; /* Dynamic viewport height for mobile */
+            height: 100dvh; 
             z-index: 10000; 
             display: flex; 
             align-items: center; 
@@ -83,7 +83,7 @@
         .panel-header h3 { margin: 0; font-size: 1.2rem; color: var(--primary); font-weight: 800; }
         .panel-content { flex-grow: 1; overflow-y: auto; padding: 20px; }
 
-        /* CARDS & UI */
+        /* COMPONENTS */
         .btn { padding: 10px 16px; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition); font-size: 14px; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-secondary { background: #EDF2F7; color: var(--secondary); }
@@ -161,38 +161,27 @@
 
     <main>
         <section class="panel">
-            <div class="panel-header">
-                <h3>מאגר מתכונים</h3>
-                <button class="btn btn-primary" onclick="openRecipeModal()">+ חדש</button>
-            </div>
+            <div class="panel-header"><h3>מאגר מתכונים</h3><button class="btn btn-primary" onclick="openRecipeModal()">+ חדש</button></div>
             <div class="panel-content">
                 <input type="text" id="libSearch" style="width:100%; padding:12px; border-radius:var(--radius-md); border:1px solid #E2E8F0; margin-bottom:15px;" placeholder="חפש מתכון..." oninput="renderLib()">
-                
                 <div class="lib-section-header"><span>⭐ המתכונים שלי</span></div>
                 <div id="myRecipesContainer"></div>
-                
                 <div class="lib-section-header collapsible" onclick="toggleOtherLibrary()">
-                    <span>🌍 מתכוני משלחות אחרות</span>
-                    <span id="libraryArrow">▼</span>
+                    <span>🌍 מתכוני משלחות אחרות</span><span id="libraryArrow">▼</span>
                 </div>
                 <div id="otherRecipesContainer" style="display:none;"></div>
             </div>
         </section>
 
         <section class="panel">
-            <div class="panel-header">
-                <h3>תפריט המשלחת</h3>
-                <button class="btn btn-danger" onclick="clearPlan()">נקה הכל</button>
-            </div>
+            <div class="panel-header"><h3>תפריט המשלחת</h3><button class="btn btn-danger" onclick="clearPlan()">נקה הכל</button></div>
             <div class="panel-content" id="plannerContainer"></div>
         </section>
 
         <section class="panel">
             <div class="panel-header"><h3>רשימת קניות</h3></div>
             <div class="panel-content" id="shoppingContainer"></div>
-            <div style="padding: 20px; border-top: 1px solid #EDF2F7;">
-                <button class="btn btn-success" onclick="copyToClipboard()">📲 העתק לוואטסאפ</button>
-            </div>
+            <div style="padding: 20px; border-top: 1px solid #EDF2F7;"><button class="btn btn-success" onclick="copyToClipboard()">📲 העתק לוואטסאפ</button></div>
         </section>
     </main>
 </div>
@@ -214,10 +203,7 @@
 </div>
 
 <div id="adminModal" class="modal">
-    <div class="modal-header">
-        <h2 style="margin:0;">ניהול משתמשים</h2>
-        <button class="btn btn-secondary" onclick="closeAdminModal()">סגור</button>
-    </div>
+    <div class="modal-header"><h2>ניהול משתמשים</h2><button class="btn btn-secondary" onclick="closeAdminModal()">סגור</button></div>
     <div style="max-width:900px; margin:0 auto;">
         <div class="card" style="padding:25px; background:#f8fafc; display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:15px; align-items:flex-end; margin-bottom:30px;">
             <div><label style="font-size:12px; font-weight:bold;">ID כניסה</label><input type="text" id="newUsername" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px;"></div>
@@ -233,7 +219,6 @@
 </div>
 
 <script>
-    // Configuration & State
     const COUNTRIES = { "ישראל": "🇮🇱", "רומניה": "🇷🇴", "הונגריה": "🇭🇺", "דנמרק": "🇩🇰", "אנגליה": "🇬🇧", "שוויץ": "🇨🇭" };
     const DIETS = [
         {id: 'none', label: 'רגיל'},
@@ -249,13 +234,12 @@
     let globalLibrary = JSON.parse(localStorage.getItem('globalScoutLibrary')) || {};
     let currentUser = null, userPlan = [], currentTotals = {}, editingUserId = null;
 
-    // Login logic
     function login() {
         const input = document.getElementById('usernameInput').value.toLowerCase().trim();
         if (USERS[input]) {
             currentUser = { ...USERS[input], id: input };
             document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('appContainer').style.display = 'flex'; // SHOW APP
+            document.getElementById('appContainer').style.display = 'flex'; 
             document.getElementById('adminBtn').style.display = (currentUser.role === 'admin') ? 'inline-flex' : 'none';
             userPlan = JSON.parse(localStorage.getItem('plan_' + currentUser.id)) || [];
             updateUserUI(); renderLib(); calc();
@@ -295,7 +279,6 @@
         }
     }
 
-    // Core Calculation Logic
     function calc() {
         const pax = { 
             total: Math.max(0, parseInt(document.getElementById('paxTotal').value || 0)), 
@@ -341,7 +324,6 @@
         document.getElementById('shoppingContainer').innerHTML = shopHTML;
     }
 
-    // Modal & Recipe Editors
     function openRecipeModal(key=null) { 
         document.getElementById('mName').value = key || ""; 
         document.getElementById('modalIngs').innerHTML = "";
@@ -363,21 +345,8 @@
     function addIngRow(d={n:"", q:0, u:"קג", c:"מוצרים יבשים", r:['none']}) {
         let div = document.createElement('div'); div.className = 'ing-row';
         let activeRests = Array.isArray(d.r) ? d.r : [d.r];
-        let dietHTML = DIETS.map(diet => `
-            <label class="diet-opt">
-                <input type="checkbox" value="${diet.id}" ${activeRests.includes(diet.id) ? 'checked' : ''} onchange="handleDietClick(this, this.closest('.diet-multi'))">
-                ${diet.label}
-            </label>
-        `).join('');
-
-        div.innerHTML = `
-            <input type="text" class="i-name" value="${d.n}" placeholder="רכיב">
-            <input type="number" class="i-qty" value="${d.q}" step="0.01">
-            <select>${UNITS.map(u=>`<option ${d.u==u?'selected':''}>${u}</option>`).join('')}</select>
-            <select>${CATEGORIES.map(c=>`<option ${d.c==c?'selected':''}>${c}</option>`).join('')}</select>
-            <div class="diet-multi">${dietHTML}</div>
-            <button onclick="this.parentElement.remove()" style="background:none; border:none; cursor:pointer; font-size:18px;">❌</button>
-        `;
+        let dietHTML = DIETS.map(diet => `<label class="diet-opt"><input type="checkbox" value="${diet.id}" ${activeRests.includes(diet.id) ? 'checked' : ''} onchange="handleDietClick(this, this.closest('.diet-multi'))">${diet.label}</label>`).join('');
+        div.innerHTML = `<input type="text" class="i-name" value="${d.n}" placeholder="רכיב"><input type="number" class="i-qty" value="${d.q}" step="0.01"><select>${UNITS.map(u=>`<option ${d.u==u?'selected':''}>${u}</option>`).join('')}</select><select>${CATEGORIES.map(c=>`<option ${d.c==c?'selected':''}>${c}</option>`).join('')}</select><div class="diet-multi">${dietHTML}</div><button onclick="this.parentElement.remove()" style="background:none; border:none; cursor:pointer; font-size:18px;">❌</button>`;
         document.getElementById('modalIngs').appendChild(div);
     }
 
@@ -401,7 +370,6 @@
     function removeFromPlan(i) { userPlan.splice(i, 1); localStorage.setItem('plan_' + currentUser.id, JSON.stringify(userPlan)); calc(); }
     function clearPlan() { if(confirm("לנקות את כל התפריט?")) { userPlan = []; localStorage.setItem('plan_' + currentUser.id, JSON.stringify(userPlan)); calc(); } }
 
-    // Admin Tools
     function openAdminModal() { document.getElementById('newCountrySelect').innerHTML = Object.keys(COUNTRIES).map(c=>`<option value="${c}">${c}</option>`).join(''); renderUsersTable(); document.getElementById('adminModal').style.display='block'; }
     function closeAdminModal() { document.getElementById('adminModal').style.display='none'; }
     function addNewUser() {
@@ -415,7 +383,7 @@
     function editUser(id) { const u = USERS[id]; document.getElementById('newUsername').value = id; document.getElementById('newName').value = u.name; document.getElementById('newCountrySelect').value = u.country; editingUserId = id; }
     function renderUsersTable() {
         const b = document.getElementById('usersTableBody'); b.innerHTML = "";
-        for(let id in USERS) b.innerHTML += `<tr style="border-bottom:1px solid #eee;"><td style="padding:15px;">${id}</td><td>${USERS[id].name}</td><td>${USERS[id].country} ${USERS[id].flag}</td><td style="text-align:center;">${id !== 'admin' ? `<span onclick="editUser('${id}')" style="cursor:pointer; margin-left:15px;">✏️</span><span onclick="deleteUser('${id}')" style="cursor:pointer;">❌</span>` : '--'}</td></tr>`;
+        for(let id in USERS) b.innerHTML += `<tr style="border-bottom:1px solid #edf2f7;"><td style="padding:15px;">${id}</td><td>${USERS[id].name}</td><td>${USERS[id].country} ${USERS[id].flag}</td><td style="text-align:center;">${id !== 'admin' ? `<span onclick="editUser('${id}')" style="cursor:pointer; margin-left:15px;">✏️</span><span onclick="deleteUser('${id}')" style="cursor:pointer;">❌</span>` : '--'}</td></tr>`;
     }
     function deleteUser(id) { if(confirm("מחיקת משתמש?")) { delete USERS[id]; localStorage.setItem('scoutUsers', JSON.stringify(USERS)); renderUsersTable(); } }
 
