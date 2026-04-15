@@ -22,20 +22,23 @@
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        /* --- FOUNDATION (Bulletproof Reset) --- */
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        /* איפוס מוחלט כדי למנוע גלילה אופקית (הגורם לבעיה) */
+        * { box-sizing: border-box; max-width: 100%; -webkit-tap-highlight-color: transparent; }
+        
         html, body { 
             margin: 0; padding: 0; 
             width: 100%; height: 100%; 
             background: var(--bg); 
             font-family: 'Segoe UI', system-ui, sans-serif; 
-            overflow-x: hidden; /* CRITICAL: Kills horizontal mobile scrolling */
+            overflow-x: hidden !important; /* קריטי - מונע בריחה הצידה */
+            color: var(--text-main);
         }
 
-        /* --- LOGIN SCREEN --- */
+        /* --- מסך כניסה חסין תקלות --- */
         #loginScreen { 
             position: fixed; 
-            top: 0; right: 0; bottom: 0; left: 0; /* Locks to exact screen boundaries */
+            top: 0; right: 0; bottom: 0; left: 0; 
+            width: 100%; height: 100%;
             z-index: 99999; 
             display: flex; 
             align-items: center; 
@@ -48,103 +51,96 @@
             padding: 40px 25px; 
             border-radius: var(--radius-lg); 
             width: 100%; 
-            max-width: 350px; 
+            max-width: 360px; 
             text-align: center; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
         }
-        .login-card img { width: 180px; margin-bottom: 25px; max-width: 100%; }
+        .login-card img { width: 180px; margin-bottom: 25px; }
         .login-card input { 
             width: 100%; padding: 15px; margin-bottom: 20px; 
             border-radius: var(--radius-md); border: 2px solid #E2E8F0; 
             text-align: center; font-size: 1.1rem; font-weight: bold;
         }
 
-        /* --- APP WRAPPER --- */
+        /* --- מעטפת האפליקציה (מוסתרת עד להתחברות) --- */
         #appContainer { 
-            display: none; /* Controlled completely by JS */
+            display: none; 
             flex-direction: column; 
             width: 100%; 
             min-height: 100vh; 
         }
 
-        /* --- HEADER --- */
+        /* --- עיצוב האפליקציה: מותאם קודם כל למובייל --- */
         header { 
             background: var(--panel); 
             padding: 15px; 
             display: flex; 
-            flex-direction: column; /* Mobile first */
+            flex-direction: column; 
             align-items: center; 
             gap: 15px;
             border-bottom: 4px solid var(--primary);
-            flex-shrink: 0;
         }
-        .logo-container img { height: 75px; max-width: 100%; }
+        .logo-container img { height: 70px; }
         
         .header-controls { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; }
-        .pax-inputs { display: flex; flex-wrap: wrap; gap: 8px; background: #F8FAFC; padding: 10px; border-radius: var(--radius-md); border: 1px solid #E2E8F0; justify-content: center; width: 100%; }
-        .input-group { display: flex; flex-direction: column; align-items: center; }
-        .input-group label { font-size: 10px; font-weight: 800; color: var(--secondary); margin-bottom: 2px; }
-        .input-group input { width: 55px; padding: 6px; border-radius: 6px; border: 1px solid #CBD5E0; text-align: center; font-weight: bold; font-size: 13px; }
-        #paxTotal { width: 75px; background: var(--primary-light); color: var(--primary); }
+        
+        .pax-inputs { 
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; 
+            background: #F8FAFC; padding: 10px; border-radius: var(--radius-md); 
+            border: 1px solid #E2E8F0; width: 100%; 
+        }
+        .input-group { display: flex; flex-direction: column; align-items: center; min-width: 50px; }
+        .input-group label { font-size: 10px; font-weight: 800; color: var(--secondary); margin-bottom: 4px; }
+        .input-group input { width: 100%; max-width: 65px; padding: 8px 4px; border-radius: 6px; border: 1px solid #CBD5E0; text-align: center; font-weight: bold; font-size: 14px; }
+        #paxTotal { background: var(--primary-light); color: var(--primary); }
 
-        /* --- MAIN LAYOUT (Mobile First) --- */
-        main { 
-            display: flex; 
-            flex-direction: column; 
-            flex-grow: 1; 
-            gap: 20px; 
-            padding: 15px; 
-        }
-        .panel { 
-            background: var(--panel); border-radius: var(--radius-lg); 
-            display: flex; flex-direction: column; 
-            box-shadow: var(--shadow); border: 1px solid #E2E8F0; 
-            min-height: 400px; 
-        }
+        .user-actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; width: 100%; }
+
+        main { display: flex; flex-direction: column; gap: 20px; padding: 15px; flex-grow: 1; }
+        .panel { background: var(--panel); border-radius: var(--radius-lg); display: flex; flex-direction: column; box-shadow: var(--shadow); border: 1px solid #E2E8F0; min-height: 400px; }
         .panel-header { padding: 15px; border-bottom: 1px solid #EDF2F7; display: flex; justify-content: space-between; align-items: center; }
         .panel-header h3 { margin: 0; font-size: 1.1rem; color: var(--primary); font-weight: 800; }
         .panel-content { padding: 15px; overflow-y: auto; flex-grow: 1; }
 
-        /* --- DESKTOP OVERRIDES --- */
+        /* --- תצוגת מחשב (מתרחב כשגודל המסך מאפשר) --- */
         @media (min-width: 1100px) {
             #appContainer { height: 100vh; overflow: hidden; }
-            header { flex-direction: row; justify-content: space-between; padding: 10px 25px; }
+            header { flex-direction: row; justify-content: space-between; padding: 15px 30px; height: 100px; }
             .header-controls { flex-direction: row; width: auto; }
             .pax-inputs { width: auto; flex-wrap: nowrap; }
-            main { 
-                flex-direction: row; display: grid; 
-                grid-template-columns: 360px 1fr 380px; 
-                height: calc(100vh - 100px); overflow: hidden; 
-            }
-            .panel { min-height: 0; height: 100%; } /* Enables internal scrolling */
+            .user-actions { width: auto; justify-content: flex-end; }
+            main { flex-direction: row; align-items: stretch; height: calc(100vh - 100px); padding: 20px; }
+            .panel { min-height: 0; height: 100%; flex: 1; }
+            .panel:nth-child(1) { flex: 0 0 360px; }
+            .panel:nth-child(3) { flex: 0 0 400px; }
         }
 
-        /* --- UI COMPONENTS --- */
-        .btn { padding: 10px 16px; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; text-align: center; justify-content: center; }
+        /* --- רכיבים כלליים --- */
+        .btn { padding: 10px 16px; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; border: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-secondary { background: #EDF2F7; color: var(--secondary); }
         .btn-danger { background: #FFF5F5; color: var(--danger); border: 1px solid #FED7D7; }
         .btn-success { background: var(--success); color: white; width: 100%; padding: 18px; font-size: 1.1rem; }
 
-        .card { background: white; border-radius: var(--radius-md); border: 1px solid #E2E8F0; margin-bottom: 12px; padding: 12px; }
-        .recipe-card { cursor: pointer; border-right: 5px solid #CBD5E0; }
+        .card { background: white; border-radius: var(--radius-md); border: 1px solid #E2E8F0; margin-bottom: 12px; padding: 15px; }
+        .recipe-card { cursor: pointer; border-right: 5px solid #CBD5E0; transition: transform 0.2s; }
+        .recipe-card:active { transform: scale(0.98); }
         .recipe-card.mine { border-right-color: var(--primary); }
         .card-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
-        .tag { font-size: 11px; padding: 3px 8px; border-radius: 10px; background: #EDF2F7; font-weight: bold; display: inline-block; }
-        .meal-card-header { background: #F8FAFC; padding: 10px 15px; font-weight: 800; display: flex; justify-content: space-between; border-bottom: 1px solid #EDF2F7; margin: -12px -12px 12px -12px; border-radius: 12px 12px 0 0; }
+        .tag { font-size: 11px; padding: 4px 8px; border-radius: 8px; background: #EDF2F7; font-weight: bold; }
+        .meal-card-header { background: #F8FAFC; padding: 10px 15px; font-weight: 800; display: flex; justify-content: space-between; border-bottom: 1px solid #EDF2F7; margin: -15px -15px 15px -15px; border-radius: 12px 12px 0 0; }
 
         .lib-section-header { padding: 15px; background: #F8FAFC; border-radius: var(--radius-md); display: flex; justify-content: space-between; font-weight: 800; color: var(--primary); margin: 20px 0 10px 0; }
-        .lib-section-header.collapsible { cursor: pointer; }
-
-        /* --- MODALS (Mobile First) --- */
-        .modal { display: none; position: fixed; inset: 0; background: white; z-index: 10000; padding: 20px; overflow-y: auto; }
+        
+        /* --- מודלים (חלונות קופצים) --- */
+        .modal { display: none; position: fixed; inset: 0; background: white; z-index: 10000; padding: 20px; overflow-y: auto; width: 100%; height: 100%; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; }
         
         .ing-row { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; padding: 15px; background: #f8fafc; border-radius: var(--radius-md); border: 1px solid #e2e8f0; }
         .ing-row input, .ing-row select { padding: 12px; border: 1px solid #CBD5E0; border-radius: 8px; font-size: 14px; width: 100%; }
         
         .diet-multi { display: flex; flex-wrap: wrap; gap: 6px; margin: 5px 0; }
-        .diet-opt { font-size: 11px; display: flex; align-items: center; gap: 4px; background: #fff; border: 1px solid #CBD5E0; padding: 6px 10px; border-radius: 8px; cursor: pointer; }
+        .diet-opt { font-size: 12px; display: flex; align-items: center; gap: 5px; background: #fff; border: 1px solid #CBD5E0; padding: 8px 12px; border-radius: 8px; cursor: pointer; flex-grow: 1; justify-content: center; }
         .diet-opt input { display: none; }
         .diet-opt:has(input:checked) { background: var(--primary); color: white; border-color: var(--primary); }
 
@@ -155,9 +151,10 @@
             .modal { padding: 40px; }
             .ing-row { flex-direction: row; display: grid; grid-template-columns: 1.5fr 0.6fr 0.8fr 1fr 2.5fr 45px; align-items: center; }
             .admin-grid { flex-direction: row; display: grid; grid-template-columns: 1fr 1fr 1fr auto; align-items: flex-end; }
+            .diet-opt { flex-grow: 0; }
         }
 
-        #toast { visibility: hidden; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #2D3748; color: white; padding: 15px 35px; border-radius: 50px; z-index: 99999; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        #toast { visibility: hidden; position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: #2D3748; color: white; padding: 15px 35px; border-radius: 50px; z-index: 99999; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); text-align: center; width: max-content; }
     </style>
 </head>
 <body>
@@ -168,7 +165,7 @@
     <div class="login-card">
         <img src="משלחות קיץ צבעוני.png" alt="לוגו צופים">
         <h2 style="color:var(--primary); margin:0 0 10px 0;">כניסת משלחת</h2>
-        <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px;">הקלד <strong style="color:var(--primary)">admin</strong> לכניסת מנהל</p>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px;">לכניסת מנהל הקלד <strong style="color:var(--primary)">admin</strong></p>
         <input type="text" id="usernameInput" placeholder="ID כניסה" onkeypress="if(event.key==='Enter') login()">
         <button class="btn btn-primary" onclick="login()" style="width:100%; padding:15px; font-size:1.2rem;">התחברות למערכת</button>
     </div>
@@ -185,8 +182,8 @@
                 <div class="input-group"><label>גלוטן 🌾</label><input type="number" id="paxGF" value="0" oninput="calc()"></div>
                 <div class="input-group"><label>לקטוז 🥛</label><input type="number" id="paxLac" value="0" oninput="calc()"></div>
             </div>
-            <div style="display:flex; align-items:center; gap:15px;">
-                <div id="userDisplay" style="font-weight:bold; font-size:14px; color:var(--primary);"></div>
+            <div class="user-actions">
+                <div id="userDisplay" style="font-weight:bold; font-size:15px; color:var(--primary); background:var(--primary-light); padding:8px 15px; border-radius:10px;"></div>
                 <button class="btn btn-secondary" onclick="logout()">התנתקות</button>
                 <button id="adminBtn" class="btn btn-primary" style="display:none;" onclick="openAdminModal()">⚙️ ניהול</button>
             </div>
@@ -197,17 +194,14 @@
         <section class="panel">
             <div class="panel-header">
                 <h3>מאגר מתכונים</h3>
-                <button class="btn btn-primary" onclick="openRecipeModal()">+ חדש</button>
+                <button class="btn btn-primary" onclick="openRecipeModal()">+ מתכון חדש</button>
             </div>
             <div class="panel-content">
                 <input type="text" id="libSearch" style="width:100%; padding:12px; border-radius:var(--radius-md); border:1px solid #E2E8F0; margin-bottom:15px;" placeholder="חפש מתכון..." oninput="renderLib()">
-                
                 <div class="lib-section-header" style="margin-top:0;"><span>⭐ המתכונים שלי</span></div>
                 <div id="myRecipesContainer"></div>
-                
                 <div class="lib-section-header collapsible" onclick="toggleOtherLibrary()">
-                    <span>🌍 מתכוני משלחות אחרות</span>
-                    <span id="libraryArrow">▼</span>
+                    <span>🌍 מתכוני משלחות אחרות</span><span id="libraryArrow">▼</span>
                 </div>
                 <div id="otherRecipesContainer" style="display:none;"></div>
             </div>
@@ -222,7 +216,7 @@
         </section>
 
         <section class="panel">
-            <div class="panel-header"><h3>רשימת קניות</h3></div>
+            <div class="panel-header"><h3>רשימת קניות מרוכזת</h3></div>
             <div class="panel-content" id="shoppingContainer"></div>
             <div style="padding: 15px; border-top: 1px solid #EDF2F7;">
                 <button class="btn btn-success" onclick="copyToClipboard()">📲 העתק לוואטסאפ</button>
@@ -237,12 +231,12 @@
         <button class="btn btn-secondary" onclick="closeRecipeModal()">סגור</button>
     </div>
     <div style="max-width:1100px; margin:0 auto; width:100%;">
-        <input type="text" id="mName" placeholder="שם המנה" style="width:100%; padding:20px; font-size:1.5rem; font-weight:800; border:2px solid var(--primary); border-radius:var(--radius-md); margin-bottom:25px;">
+        <input type="text" id="mName" placeholder="שם המנה (לדוגמה: פסטה ברוטב עגבניות)" style="width:100%; padding:20px; font-size:1.5rem; font-weight:800; border:2px solid var(--primary); border-radius:var(--radius-md); margin-bottom:25px;">
         <div id="modalIngs"></div>
-        <button class="btn btn-secondary" onclick="addIngRow()" style="width:100%; margin-top:10px; border:2px dashed #CBD5E0; justify-content:center;">+ הוסף שורת רכיב</button>
+        <button class="btn btn-secondary" onclick="addIngRow()" style="width:100%; margin-top:10px; border:2px dashed #CBD5E0; padding:15px; font-size:16px;">+ הוסף שורת רכיב</button>
         <div style="margin-top:40px; display:flex; gap:15px; flex-wrap:wrap;">
-            <button class="btn btn-primary" onclick="saveRecipe()" style="flex:1; min-width:200px; justify-content:center; padding:18px; font-size:1.1rem;">שמור למאגר</button>
-            <button class="btn btn-secondary" onclick="closeRecipeModal()" style="flex:1; min-width:150px; justify-content:center;">ביטול</button>
+            <button class="btn btn-primary" onclick="saveRecipe()" style="flex:1; min-width:200px; padding:18px; font-size:1.1rem;">שמור מתכון למאגר</button>
+            <button class="btn btn-secondary" onclick="closeRecipeModal()" style="flex:1; min-width:150px;">ביטול</button>
         </div>
     </div>
 </div>
@@ -255,15 +249,15 @@
     <div style="max-width:900px; margin:0 auto; width:100%;">
         <div class="card" style="padding:25px; background:#f8fafc; margin-bottom:20px;">
             <div class="admin-grid">
-                <div><label style="font-size:12px; font-weight:bold; display:block; margin-bottom:5px;">ID כניסה</label><input type="text" id="newUsername" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:8px;"></div>
+                <div><label style="font-size:12px; font-weight:bold; display:block; margin-bottom:5px;">ID כניסה (באנגלית)</label><input type="text" id="newUsername" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:8px;"></div>
                 <div><label style="font-size:12px; font-weight:bold; display:block; margin-bottom:5px;">שם תצוגה</label><input type="text" id="newName" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:8px;"></div>
-                <div><label style="font-size:12px; font-weight:bold; display:block; margin-bottom:5px;">מדינה</label><select id="newCountrySelect" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:8px;"></select></div>
+                <div><label style="font-size:12px; font-weight:bold; display:block; margin-bottom:5px;">מדינה</label><select id="newCountrySelect" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:8px; height:44px;"></select></div>
                 <button class="btn btn-primary" id="adminActionBtn" onclick="addNewUser()" style="height:44px;">שמור משתמש</button>
             </div>
         </div>
         <div class="table-responsive">
             <table style="width:100%; border-collapse:collapse; text-align:right; min-width:400px;">
-                <thead><tr style="border-bottom:2px solid #edf2f7;"><th style="padding:15px;">ID</th><th>שם</th><th>מדינה</th><th style="text-align:center">פעולות</th></tr></thead>
+                <thead><tr style="border-bottom:2px solid #edf2f7; background:#F8FAFC;"><th style="padding:15px;">ID</th><th>שם</th><th>מדינה</th><th style="text-align:center">פעולות</th></tr></thead>
                 <tbody id="usersTableBody"></tbody>
             </table>
         </div>
@@ -271,36 +265,40 @@
 </div>
 
 <script>
-    // System Data
+    // --- הגדרות בסיס ---
     const COUNTRIES = { "ישראל": "🇮🇱", "רומניה": "🇷🇴", "הונגריה": "🇭🇺", "דנמרק": "🇩🇰", "אנגליה": "🇬🇧", "שוויץ": "🇨🇭" };
     const DIETS = [ {id: 'none', label: 'רגיל'}, {id: 'Vegan', label: 'טבעוני 🥬'}, {id: 'Vegetarian', label: 'צמחוני 🥦'}, {id: 'GF', label: 'גלוטן 🌾'}, {id: 'Lac', label: 'לקטוז 🥛'} ];
     const UNITS = ["קג", "גרם", "ליטר", "מל", "יחידות", "חבילות", "ארגזים"];
     const CATEGORIES = ["ירקות ופירות", "מוצרים יבשים", "מאפיה", "מוצרי בשר", "מוצרי חלב", "תבלינים", "חטיפים ומתוקים", "ציוד מתכלה"];
 
-    // App State Initialization
+    // --- אתחול נתונים ---
     let USERS = {};
     try { USERS = JSON.parse(localStorage.getItem('scoutUsers')) || {}; } catch(e) { USERS = {}; }
-    USERS["admin"] = { name: "תומר", country: "ישראל", flag: "🇮🇱", role: "admin" }; // Enforce Admin Identity
+    
+    // הבטחה שתומר תמיד יישאר המנהל
+    USERS["admin"] = { name: "תומר", country: "ישראל", flag: "🇮🇱", role: "admin" }; 
     localStorage.setItem('scoutUsers', JSON.stringify(USERS));
 
     let globalLibrary = JSON.parse(localStorage.getItem('globalScoutLibrary')) || {};
     let currentUser = null, userPlan = [], currentTotals = {}, editingUserId = null;
 
-    // Logic: Login
+    // --- לוגיקת התחברות ---
     function login() {
         const input = document.getElementById('usernameInput').value.toLowerCase().trim();
         if (USERS[input]) {
             currentUser = { ...USERS[input], id: input };
-            document.getElementById('loginScreen').style.display = 'none'; // Kills the overlay
-            document.getElementById('appContainer').style.display = 'flex'; // Activates app layout
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'flex'; 
             document.getElementById('adminBtn').style.display = (currentUser.role === 'admin') ? 'inline-flex' : 'none';
             
             try { userPlan = JSON.parse(localStorage.getItem('plan_' + currentUser.id)) || []; } catch(e) { userPlan = []; }
             
+            // תצוגת שם ולאחריו דגל (מופיע משמאל בעברית)
             document.getElementById('userDisplay').innerHTML = `${currentUser.name} ${currentUser.flag}`;
+            
             renderLib(); calc();
         } else { 
-            alert("משתמש לא קיים. אם אתה המנהל, הקלד: admin"); 
+            alert("משתמש לא קיים. לכניסת מנהל הקלד: admin"); 
         }
     }
 
@@ -316,7 +314,7 @@
         }
     }
 
-    // Logic: Render Library
+    // --- רינדור מאגר ---
     function renderLib() {
         let myCont = document.getElementById('myRecipesContainer'), otherCont = document.getElementById('otherRecipesContainer');
         myCont.innerHTML = ''; otherCont.innerHTML = '';
@@ -331,7 +329,7 @@
                     <div class="card-meta">
                         <span class="tag">${meal.creatorName} ${meal.creatorFlag || ''}</span>
                         <div style="display:flex; gap:10px; font-size:16px;">
-                            ${isMine ? `<span onclick="event.stopPropagation(); openRecipeModal('${key}')">✏️ ערוך</span><span onclick="event.stopPropagation(); deleteFromLib('${key}')">❌ מחיקה</span>` : `<button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; background:var(--primary-light); color:var(--primary);" onclick="event.stopPropagation(); duplicateMeal('${key}')">הוסף למתכונים שלי</button>`}
+                            ${isMine ? `<span onclick="event.stopPropagation(); openRecipeModal('${key}')">✏️</span><span onclick="event.stopPropagation(); deleteFromLib('${key}')">❌</span>` : `<button class="btn btn-secondary" style="padding:4px 8px; font-size:11px; background:var(--primary-light); color:var(--primary);" onclick="event.stopPropagation(); duplicateMeal('${key}')">הוסף אלי</button>`}
                         </div>
                     </div>
                 </div>`;
@@ -339,7 +337,7 @@
         }
     }
 
-    // Logic: Core Calculator Engine
+    // --- חישוב כמויות ---
     function calc() {
         const pax = { 
             total: Math.max(0, parseInt(document.getElementById('paxTotal').value || 0)), 
@@ -357,21 +355,23 @@
                 meal.ings.forEach(ing => {
                     let mult = 0;
                     let rests = Array.isArray(ing.r) ? ing.r : [ing.r];
-                    if (rests.includes('none')) { mult = pax.total; } else { rests.forEach(r => mult += (pax[r] || 0)); }
+                    
+                    // חישוב מרובה תזונות
+                    if (rests.includes('none')) { mult = pax.total; } 
+                    else { rests.forEach(r => mult += (pax[r] || 0)); }
                     
                     let rawAmt = (mult / 10) * ing.q, finalU = ing.u, finalAmt = rawAmt;
                     if (ing.u === "גרם") { finalAmt = rawAmt / 1000; finalU = "קג"; }
                     if (ing.u === "מל") { finalAmt = rawAmt / 1000; finalU = "ליטר"; }
                     
                     let displayAmt = finalAmt % 1 === 0 ? finalAmt : finalAmt.toFixed(2);
-                    
                     mHTML += `<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed #eee; font-size:14px;"><span>${ing.n}</span><span style="font-weight:bold; color:var(--primary)">${displayAmt} ${finalU}</span></div>`;
                     
                     if (!currentTotals[ing.c]) currentTotals[ing.c] = {};
                     let key = `${ing.n} (${finalU})`;
                     currentTotals[ing.c][key] = (currentTotals[ing.c][key] || 0) + finalAmt;
                 });
-                plannerHTML += `<div class="card" style="border-right:5px solid var(--accent);"><div class="meal-card-header">${mealName} <span onclick="removeFromPlan(${idx})" style="cursor:pointer; color:var(--danger);">❌</span></div><div>${mHTML}</div></div>`;
+                plannerHTML += `<div class="card" style="border-right:5px solid var(--accent);"><div class="meal-card-header">${mealName} <span onclick="removeFromPlan(${idx})" style="cursor:pointer; color:var(--danger); font-size:18px;">❌</span></div><div>${mHTML}</div></div>`;
             }
         });
         document.getElementById('plannerContainer').innerHTML = plannerHTML || '<div style="text-align:center; color:#A0AEC0; margin-top:40px; font-weight:bold;">הוסיפו מתכונים כדי להתחיל</div>';
@@ -392,7 +392,7 @@
         document.getElementById('shoppingContainer').innerHTML = shopHTML || '<div style="text-align:center; color:#A0AEC0; font-weight:bold; margin-top:40px;">הרשימה ריקה</div>';
     }
 
-    // Logic: Editor Modal
+    // --- עורך מתכונים ---
     function openRecipeModal(key=null) { 
         document.getElementById('mName').value = key || ""; 
         document.getElementById('modalIngs').innerHTML = "";
@@ -400,8 +400,10 @@
         ings.length ? ings.forEach(i => addIngRow(i)) : addIngRow();
         document.getElementById('recipeModal').style.display = 'block';
     }
+    
     function closeRecipeModal() { document.getElementById('recipeModal').style.display = 'none'; }
     
+    // לוגיקה בלעדית ל"רגיל"
     function handleDietClick(checkbox, row) {
         const checkboxes = row.querySelectorAll('input[type="checkbox"]');
         if (checkbox.value === 'none' && checkbox.checked) {
@@ -414,6 +416,7 @@
     function addIngRow(d={n:"", q:0, u:"קג", c:"מוצרים יבשים", r:['none']}) {
         let div = document.createElement('div'); div.className = 'ing-row';
         let activeRests = Array.isArray(d.r) ? d.r : [d.r];
+        
         let dietHTML = DIETS.map(diet => `
             <label class="diet-opt">
                 <input type="checkbox" value="${diet.id}" ${activeRests.includes(diet.id) ? 'checked' : ''} onchange="handleDietClick(this, this.closest('.diet-multi'))">
@@ -427,7 +430,7 @@
             <select>${UNITS.map(u=>`<option ${d.u==u?'selected':''}>${u}</option>`).join('')}</select>
             <select>${CATEGORIES.map(c=>`<option ${d.c==c?'selected':''}>${c}</option>`).join('')}</select>
             <div class="diet-multi">${dietHTML}</div>
-            <button class="btn btn-danger" onclick="this.parentElement.remove()" style="width:100%; padding:12px;">מחק שורה</button>
+            <button class="btn btn-danger" onclick="this.parentElement.remove()" style="padding:10px; width:100%; margin-top:5px;">מחיקה</button>
         `;
         document.getElementById('modalIngs').appendChild(div);
     }
@@ -452,14 +455,13 @@
         localStorage.setItem('globalScoutLibrary', JSON.stringify(globalLibrary)); renderLib(); calc(); closeRecipeModal();
     }
 
-    // Interactions
     function deleteFromLib(key) { if(confirm("למחוק מתכון מהמאגר הכללי?")) { delete globalLibrary[key]; localStorage.setItem('globalScoutLibrary', JSON.stringify(globalLibrary)); renderLib(); calc(); } }
     function duplicateMeal(key) { let nk=key+" (עותק)"; globalLibrary[nk]={...globalLibrary[key], creatorId:currentUser.id, creatorName:currentUser.name, creatorFlag:currentUser.flag}; localStorage.setItem('globalScoutLibrary', JSON.stringify(globalLibrary)); renderLib(); openRecipeModal(nk); }
     function addToPlan(key) { userPlan.push(key); localStorage.setItem('plan_' + currentUser.id, JSON.stringify(userPlan)); calc(); }
     function removeFromPlan(i) { userPlan.splice(i, 1); localStorage.setItem('plan_' + currentUser.id, JSON.stringify(userPlan)); calc(); }
     function clearPlan() { if(confirm("האם למחוק את כל התפריט?")) { userPlan = []; localStorage.setItem('plan_' + currentUser.id, JSON.stringify(userPlan)); calc(); } }
 
-    // Admin Tools
+    // --- ניהול משתמשים ---
     function openAdminModal() { document.getElementById('newCountrySelect').innerHTML = Object.keys(COUNTRIES).map(c=>`<option value="${c}">${c}</option>`).join(''); renderUsersTable(); document.getElementById('adminModal').style.display='block'; }
     function closeAdminModal() { document.getElementById('adminModal').style.display='none'; resetAdminForm(); }
     
@@ -483,7 +485,7 @@
     
     function deleteUser(id) { if(confirm("למחוק משתמש זה?")) { delete USERS[id]; localStorage.setItem('scoutUsers', JSON.stringify(USERS)); renderUsersTable(); } }
 
-    // Export Data
+    // --- ייצוא לוואטסאפ ---
     function copyToClipboard() {
         let text = `🛒 *רשימת קניות המשלחת ל${currentUser.country} ${currentUser.flag}*\n----------------------------------------\n`;
         CATEGORIES.forEach(cat => { 
